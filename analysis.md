@@ -11,7 +11,6 @@ from statsmodels.nonparametric.kernel_regression import KernelReg
 # Q_11
 
 
-
 ```python
 data = pd.read_stata('maimonides.dta')
 
@@ -51,7 +50,6 @@ else:
 # Q_12
 
 
-
 ```python
 data = data[(data['avgmath'] <= 100) & (data['avgmath'] > 0)].copy()
 
@@ -81,7 +79,6 @@ plt.savefig('classize_vs_enrollment.png')
 
 
     
-![png](output_5_0.png)
     
 
 
@@ -268,14 +265,12 @@ model_14a_with = smf.ols('avgmath ~ large_class + enrollment_centered + perc_dis
 model_14a_without = smf.ols('avgmath ~ large_class + enrollment_centered', data=data_a).fit()
 
 
-
 data['predicted_size'] = data['enrollment'] / (np.floor((data['enrollment'] - 1) / 40) + 1)
 
 
 model_14b_with = smf.ols('avgmath ~ predicted_size + perc_disadvantaged', data=data).fit()
 
 model_14b_without = smf.ols('avgmath ~ predicted_size', data=data).fit()
-
 
 
 data_a['above_41'] = (data_a['enrollment'] >= 41).astype(int)
@@ -288,7 +283,6 @@ data_a['classize_fitted'] = stage1_15a.fittedvalues
 model_15a_with = smf.ols('avgmath ~ classize_fitted + enrollment_centered + perc_disadvantaged', data=data_a).fit()
 
 model_15a_without = smf.ols('avgmath ~ classize_fitted + enrollment_centered', data=data_a).fit()
-
 
 
 data['above_threshold'] = ((data['enrollment'] - 1) % 40 >= 0).astype(int)
@@ -526,7 +520,6 @@ print("Is the coefficient of large_class significant? It should be insignificant
 
 
     
-![png](output_15_0.png)
     
 
 
@@ -536,20 +529,17 @@ print("Is the coefficient of large_class significant? It should be insignificant
 
 
     
-![png](output_15_2.png)
     
 
 
     Part (b): Is there a clear discontinuity in avgmath at the cutoff (enrollment=41)?
     
 
-    C:\Users\SHAYAN\AppData\Local\Temp\ipykernel_7052\1745654502.py:49: SettingWithCopyWarning: 
     A value is trying to be set on a copy of a slice from a DataFrame.
     Try using .loc[row_indexer,col_indexer] = value instead
     
     See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
       left['enrollment_centered_sq'] = left['enrollment_centered'] ** 2
-    C:\Users\SHAYAN\AppData\Local\Temp\ipykernel_7052\1745654502.py:50: SettingWithCopyWarning: 
     A value is trying to be set on a copy of a slice from a DataFrame.
     Try using .loc[row_indexer,col_indexer] = value instead
     
@@ -559,7 +549,6 @@ print("Is the coefficient of large_class significant? It should be insignificant
 
 
     
-![png](output_15_5.png)
     
 
 

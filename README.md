@@ -1,81 +1,56 @@
-# Regression Discontinuity Design (RDD) — Class Size and Student Achievement
-### Evidence from the Maimonides Rule (Angrist & Lavy, 1999)
+# Class Size and Student Achievement: Regression Discontinuity with Maimonides' Rule
 
-This repository contains a **Python implementation of Regression Discontinuity Design (RDD)** methods to study the causal effect of **class size on student math achievement**, using Israeli school data from **Angrist and Lavy (1999)**.
+A Python replication and extension of **Angrist and Lavy (1999)**. Israeli public schools split a grade into an additional class whenever enrollment crosses a multiple of 40, so class size drops discontinuously at enrollments of 41, 81, 121, and so on. These rule-induced jumps identify the causal effect of class size on test scores.
 
-The project is based on **Problem Set 08 – Applied Metrics (MSc), Spring 2025**, and covers **OLS, Sharp RDD, Fuzzy RDD, diagnostics, and robustness checks**.
+## Design
 
----
+| | |
+|---|---|
+| **Running variable** | Grade enrollment |
+| **Cutoffs** | 41, 81, 121, … (Maimonides' rule) |
+| **Treatment** | Average class size |
+| **Outcomes** | Average math and verbal scores |
+| **Control** | Share of disadvantaged students |
 
-## Project Overview
+## Main result
 
-The Israeli education system follows the **Maimonides rule**, which caps class size at **40 students**. When enrollment exceeds multiples of 40, an additional class is created, generating **discontinuities in class size**.
+Fuzzy RD at the first cutoff (enrollment 20–60, local linear trend, enrollment above 41 as instrument for class size):
 
-We exploit these discontinuities using **RDD** to estimate the causal effect of class size on **average math test scores**.
+| | Effect of one extra student per class on average math score |
+|---|---|
+| Fuzzy RD / 2SLS | **−0.38 (SE 0.15)** |
 
-- **Running variable**: School enrollment  
-- **Cutoff(s)**: 41, 81, 121, …  
-- **Treatment**: Larger (smaller) class size  
-- **Outcome**: Average math score (`avgmath`)
+Naive OLS gives a *positive* association between class size and scores, because larger classes are found in larger, more advantaged schools. The discontinuity design reverses the sign, consistent with Angrist and Lavy's conclusion that smaller classes raise achievement.
 
----
+## Methods
 
-## Data
+- Replication of the descriptive statistics (Table I) and OLS results (Table II) of the original paper
+- Graphical RD analysis: class size and scores against enrollment, with local averages around each threshold
+- Sharp RD at the 41 cutoff with linear trends and covariates
+- Fuzzy RD / 2SLS using the rule-predicted class size
+- Validity check: no jump in the share of disadvantaged students at the cutoff
 
-Input dataset:
-- `maimonides.dta`
+## Repository structure
 
-Key variables:
-- `classize` — Average class size  
-- `avgmath` — Average math score  
-- `avgverb` — Average verbal score  
-- `enrollment` — School enrollment (running variable)  
-- `perc_disadvantaged` — Share of disadvantaged students  
+```
+analysis.md   # full analysis: code, regression output and interpretation
+```
 
----
+## Reproducing
 
-## Methods Implemented
-
-### 1. Descriptive Statistics
-- Summary statistics for key variables
-- Replication of Table I in Angrist & Lavy (1999)
-
-### 2. Graphical Analysis
-- Scatter plot of class size vs. enrollment
-- Local averages (binscatter)
-- Visualization of enrollment thresholds
-
-### 3. OLS Regressions
-- Conditional correlation between class size and math scores
-- Replication of columns (4)–(6) of Table II
-
-### 4. Sharp Regression Discontinuity Design
-- Single cutoff at enrollment = 41
-- Sample restricted to enrollment ∈ [20, 60]
-- Linear trends and covariate controls
-- Extension to all thresholds using **predicted class size**
-
-### 5. Fuzzy Regression Discontinuity Design
-- First-stage: cutoff as an instrument for class size
-- Second-stage: IV estimation of causal effect
-- Implementation using:
-  - Single cutoff
-  - All thresholds (replicating Table IV)
-
-### 6. Sensitivity and Robustness
-- Inclusion/exclusion of covariates
-- Bandwidth sensitivity (±10, ±15, ±20)
-- Linear vs quadratic polynomials
-
-### 7. RDD Diagnostics (Lee & Lemieux, 2010)
-- Histogram of enrollment (manipulation test)
-- RD binscatter plot
-- Polynomial trend comparison
-- Placebo RDD using baseline covariate (`perc_disadvantaged`)
-
----
-
-## Installation
+The `maimonides.dta` file comes from the Angrist and Lavy (1999) replication data ([Angrist Data Archive](https://economics.mit.edu/people/faculty/josh-angrist/angrist-data-archive)).
 
 ```bash
-pip install pandas numpy matplotlib seaborn statsmodels scipy
+pip install pandas numpy statsmodels matplotlib seaborn
+```
+
+## Reference
+
+Angrist, J. D., and Lavy, V. (1999). Using Maimonides' Rule to Estimate the Effect of Class Size on Scholastic Achievement. *Quarterly Journal of Economics*, 114(2), 533–575.
+
+## Context
+
+Developed during the MSc in Economics at Sharif University of Technology (Applied Econometrics, Spring 2025).
+
+---
+**Shayan Pourmasoomi** · MSc Economics, Sharif University of Technology · [LinkedIn](https://www.linkedin.com/in/shayan-pourmasoomi-8b6206389)
