@@ -36,6 +36,8 @@ Naive OLS gives a *positive* association between class size and scores, because 
 analysis.md   # full analysis: code, regression output and interpretation
 ```
 
+Figures and tables are generated when the code is run; the figure files themselves are not stored in the repository.
+
 ## Reproducing
 
 The `maimonides.dta` file comes from the Angrist and Lavy (1999) replication data ([Angrist Data Archive](https://economics.mit.edu/people/faculty/josh-angrist/angrist-data-archive)).
